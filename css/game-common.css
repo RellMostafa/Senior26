@@ -1,0 +1,202 @@
+/* Common Game Styles */
+.game-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-container h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+
+.back-button {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    font-size: 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.back-button:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-5px);
+    box-shadow: 0 4px 30px rgba(255,255,255,0.2);
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.game-btn {
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.game-btn:hover {
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 4px 30px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.particles-js-canvas-el {
+    position: fixed !important;
+}
+
+/* Update particles to white */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Game specific containers */
+.game-play-area {
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem auto;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 600px;
+}
+
+.controls-info {
+    color: rgba(255,255,255,0.8);
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.2);
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 1.5rem auto;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 1rem;
+        padding-top: 5rem;
+    }
+
+    .game-container h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .back-button {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        margin: 1rem 0;
+    }
+
+    .game-play-area {
+        padding: 1rem;
+        margin: 1rem auto;
+        border-radius: 15px;
+    }
+
+    .game-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .controls-info {
+        font-size: 0.85rem;
+        padding: 0.8rem;
+        margin: 1rem auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 0.8rem;
+        padding-top: 4rem;
+    }
+
+    .game-container h1 {
+        font-size: 1.8rem;
+    }
+
+    .back-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+
+    .stats {
+        flex-direction: column;
+        width: 100%;
+        border-radius: 10px;
+        padding: 0.8rem;
+        gap: 0.8rem;
+    }
+
+    .game-play-area {
+        padding: 0.8rem;
+        border-radius: 10px;
+    }
+
+    /* Ensure canvas games are responsive */
+    canvas {
+        max-width: 100%;
+        height: auto !important;
+    }
+}
+
+/* Fix for mobile browser viewport height */
+@supports (-webkit-touch-callout: none) {
+    .game-container {
+        min-height: -webkit-fill-available;
+    }
+}

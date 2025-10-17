@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="40" cy="40" r="30" fill="white" filter="url(#glow)"/>
+    <circle cx="40" cy="40" r="25" fill="url(#target_gradient)"/>
+    <circle cx="40" cy="40" r="20" fill="white" fill-opacity="0.3"/>
+    <circle cx="40" cy="40" r="15" fill="white" fill-opacity="0.2"/>
+    <circle cx="40" cy="40" r="10" fill="white" fill-opacity="0.1"/>
+    <defs>
+        <radialGradient id="target_gradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="white"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0.5)"/>
+        </radialGradient>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+        </filter>
+    </defs>
+</svg>

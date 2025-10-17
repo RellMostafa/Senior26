@@ -1,0 +1,367 @@
+/* Memories Hall Styles */
+.memories-content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.memories-title {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    animation: fadeInDown 1s ease;
+}
+
+.memories-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease;
+}
+
+.video-container {
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 3rem;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* This will maintain aspect ratio */
+    background: #000; /* Black background for letterboxing */
+    border-radius: 15px;
+}
+
+/* Custom video controls styling */
+video::-webkit-media-controls {
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+}
+
+video::-webkit-media-controls-panel {
+    display: flex !important;
+    -webkit-appearance: none;
+}
+
+/* Mobile responsive video */
+@media (max-width: 768px) {
+    .video-container {
+        margin-bottom: 2rem;
+        border-radius: 10px;
+    }
+    
+    .video-container video {
+        border-radius: 10px;
+    }
+}
+
+.names-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeInUp 1s ease;
+}
+
+.name-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.name-button {
+    padding: 1.2rem 2.5rem;
+    min-width: 220px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+    border: none;
+}
+
+.name-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.6s ease;
+}
+
+.name-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(0, 0, 0, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.name-button:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.1),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.name-button:hover::before {
+    transform: translateX(100%) skewX(-15deg);
+}
+
+.name-button:hover::after {
+    opacity: 1;
+}
+
+/* Add futuristic corners */
+.name-button::before,
+.name-button::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.name-button::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.name-button::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.page-title {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s ease;
+}
+
+.page-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 3rem;
+    animation: fadeInUp 1s ease 0.3s both;
+}
+
+.video-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    aspect-ratio: 16/9;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: fadeInUp 1s ease 0.6s both;
+}
+
+.upload-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.upload-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+.name-card {
+    background: var(--color, rgba(255, 255, 255, 0.1));
+    color: white;
+    text-decoration: none;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 1s ease calc(0.1s * var(--delay)) both;
+}
+
+.name-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .memories-content {
+        padding: 1rem;
+        padding-top: 80px;
+    }
+
+    .memories-title {
+        font-size: 2.5rem;
+        margin-top: 1rem;
+    }
+
+    .memories-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+
+    .video-placeholder {
+        margin-bottom: 2rem;
+    }
+
+    .video-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .video-placeholder p {
+        font-size: 1rem;
+    }
+
+    .names-container {
+        gap: 1rem;
+    }
+
+    .name-row {
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .name-button {
+        padding: 1rem 1.5rem;
+        min-width: 160px;
+        font-size: 1rem;
+    }
+
+    .names-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+
+    .name-card {
+        padding: 1.2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .memories-content {
+        padding-top: 60px;
+    }
+
+    .memories-title {
+        font-size: 2rem;
+    }
+
+    .names-container {
+        padding: 0 0.5rem;
+    }
+
+    .name-button {
+        min-width: 140px;
+        width: 100%;
+    }
+
+    .name-row {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .names-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .name-button:hover {
+        transform: translateY(-2px) scale(1.01);
+    }
+}
+
+/* Add viewport height fix for mobile browsers */
+@supports (-webkit-touch-callout: none) {
+    .memories-content {
+        min-height: -webkit-fill-available;
+    }
+}

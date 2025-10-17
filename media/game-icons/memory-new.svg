@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="10" width="25" height="25" rx="4" fill="white"/>
+    <rect x="45" y="10" width="25" height="25" rx="4" fill="white"/>
+    <rect x="10" y="45" width="25" height="25" rx="4" fill="white"/>
+    <rect x="45" y="45" width="25" height="25" rx="4" fill="white"/>
+    <path d="M15 15h15v15H15z" fill="url(#memory_pattern)"/>
+    <defs>
+        <pattern id="memory_pattern" patternContentUnits="objectBoundingBox" width="1" height="1">
+            <path d="M0 0h1v1H0z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M.2.2h.6v.6H.2z" fill="rgba(255,255,255,0.4)"/>
+        </pattern>
+    </defs>
+</svg>

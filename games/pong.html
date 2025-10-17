@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Battle - Senior26</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/game-common.css">
+    <style>
+        canvas {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 1rem 0;
+        }
+
+        .player-score {
+            font-size: 2.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 15px;
+            min-width: 120px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .player-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .mode-button {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-button.active {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .mode-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container"></div>
+    
+    <a href="../games.html" class="back-button">← Back to Games</a>
+
+    <div class="game-container">
+        <h1>Pong Battle</h1>
+        <div class="mode-selector">
+            <button class="mode-button active" id="aiMode">1P vs AI</button>
+            <button class="mode-button" id="twoPlayerMode">2 Players</button>
+        </div>
+        <div class="score-board">
+            <div class="player-score">
+                <div class="player-label">Player 1</div>
+                <div id="playerScore">0</div>
+            </div>
+            <div class="player-score">
+                <div class="player-label" id="rightPlayerLabel">AI</div>
+                <div id="aiScore">0</div>
+            </div>
+        </div>
+        <div class="game-play-area">
+            <canvas id="pongCanvas" width="800" height="500"></canvas>
+        </div>
+        <div class="controls-info">
+            <p>Use Up/Down arrow keys or W/S to move your paddle</p>
+            <p>First to 5 points wins!</p>
+        </div>
+    </div>
+
+    <script src="../js/particles.js"></script>
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
+        const playerScoreElement = document.getElementById('playerScore');
+        const aiScoreElement = document.getElementById('aiScore');
+
+        // Game objects
+        const paddle = {
+            width: 15,
+            height: 90,
+            speed: 12,
+            color: 'white'
+        };
+        
+        let isTwoPlayerMode = false;
+        let keys = {
+            w: false,
+            s: false,
+            up: false,
+            down: false
+        };
+
+        const player = {
+            x: 50,
+            y: canvas.height/2 - paddle.height/2,
+            score: 0,
+            paddle: {...paddle}
+        };
+
+        const ai = {
+            x: canvas.width - 50 - paddle.width,
+            y: canvas.height/2 - paddle.height/2,
+            score: 0,
+            paddle: {...paddle}
+        };
+
+        const ball = {
+            x: canvas.width/2,
+            y: canvas.height/2,
+            radius: 10,
+            speed: 7,
+            dx: 1,
+            dy: 1,
+            color: 'white'
+        };
+
+        // Game state
+        let gameLoop;
+        let isGameOver = false;
+
+        function drawPaddle(x, y) {
+            ctx.fillStyle = paddle.color;
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.roundRect(x, y, paddle.width, paddle.height, 5);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        function drawBall() {
+            ctx.fillStyle = ball.color;
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Add trail effect
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            for(let i = 1; i <= 3; i++) {
+                ctx.beginPath();
+                ctx.arc(ball.x - ball.dx * i * 2, ball.y - ball.dy * i * 2, 
+                       ball.radius - i * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawCenterLine() {
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2, 0);
+            ctx.lineTo(canvas.width/2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function moveBall() {
+            ball.x += ball.dx * ball.speed;
+            ball.y += ball.dy * ball.speed;
+
+            // Collision with top and bottom
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                ball.dy *= -1;
+            }
+
+            // Collision with paddles
+            if (ball.x - ball.radius < player.x + paddle.width && 
+                ball.y > player.y && ball.y < player.y + paddle.height) {
+                ball.dx *= -1;
+                ball.speed += 0.2;
+            }
+
+            if (ball.x + ball.radius > ai.x && 
+                ball.y > ai.y && ball.y < ai.y + paddle.height) {
+                ball.dx *= -1;
+                ball.speed += 0.2;
+            }
+
+            // Scoring
+            if (ball.x - ball.radius < 0) {
+                ai.score++;
+                aiScoreElement.textContent = ai.score;
+                resetBall();
+            } else if (ball.x + ball.radius > canvas.width) {
+                player.score++;
+                playerScoreElement.textContent = player.score;
+                resetBall();
+            }
+
+            // Check for game over
+            if (player.score >= 5 || ai.score >= 5) {
+                gameOver();
+            }
+        }
+
+        function moveAI() {
+            if (isTwoPlayerMode) {
+                // Player 2 controls
+                if (keys.up && ai.y > 0) {
+                    ai.y -= paddle.speed;
+                }
+                if (keys.down && ai.y + paddle.height < canvas.height) {
+                    ai.y += paddle.speed;
+                }
+            } else {
+                // AI movement with improved tracking
+                const aiCenter = ai.y + paddle.height/2;
+                const ballCenter = ball.y;
+                const difficulty = 0.85; // Adjust AI difficulty (lower = harder)
+                
+                if (aiCenter < ballCenter - 35) {
+                    ai.y += paddle.speed * difficulty;
+                } else if (aiCenter > ballCenter + 35) {
+                    ai.y -= paddle.speed * difficulty;
+                }
+            }
+        }
+
+        function resetBall() {
+            ball.x = canvas.width/2;
+            ball.y = canvas.height/2;
+            ball.speed = 7;
+            ball.dx *= -1;
+            ball.dy = Math.random() > 0.5 ? 1 : -1;
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameLoop);
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = '48px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${player.score > ai.score ? 'You Win!' : 'AI Wins!'}`, 
+                        canvas.width/2, canvas.height/2);
+            
+            ctx.font = '24px Arial';
+            ctx.fillText('Press Space to play again', 
+                        canvas.width/2, canvas.height/2 + 50);
+        }
+
+        function update() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw center line
+            drawCenterLine();
+            
+            // Draw paddles
+            drawPaddle(player.x, player.y);
+            drawPaddle(ai.x, ai.y);
+            
+            // Draw ball
+            drawBall();
+            
+            // Move game objects
+            if (!isGameOver) {
+                moveBall();
+                movePlayer();
+                moveAI();
+            }
+        }
+
+        function startGame() {
+            player.score = 0;
+            ai.score = 0;
+            playerScoreElement.textContent = '0';
+            aiScoreElement.textContent = '0';
+            isGameOver = false;
+            resetBall();
+            
+            if (gameLoop) clearInterval(gameLoop);
+            gameLoop = setInterval(update, 1000/60);
+        }
+
+        // Mode selection
+        document.getElementById('aiMode').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('twoPlayerMode').classList.remove('active');
+            isTwoPlayerMode = false;
+            document.getElementById('rightPlayerLabel').textContent = 'AI';
+            startGame();
+        });
+
+        document.getElementById('twoPlayerMode').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('aiMode').classList.remove('active');
+            isTwoPlayerMode = true;
+            document.getElementById('rightPlayerLabel').textContent = 'Player 2';
+            startGame();
+        });
+
+        // Smooth controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && isGameOver) {
+                startGame();
+            }
+            
+            const key = e.key.toLowerCase();
+            if (key === 'w') keys.w = true;
+            if (key === 's') keys.s = true;
+            if (key === 'arrowup') keys.up = true;
+            if (key === 'arrowdown') keys.down = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            const key = e.key.toLowerCase();
+            if (key === 'w') keys.w = false;
+            if (key === 's') keys.s = false;
+            if (key === 'arrowup') keys.up = false;
+            if (key === 'arrowdown') keys.down = false;
+        });
+
+        function movePlayer() {
+            if (keys.w && player.y > 0) {
+                player.y -= paddle.speed;
+            }
+            if (keys.s && player.y + paddle.height < canvas.height) {
+                player.y += paddle.speed;
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

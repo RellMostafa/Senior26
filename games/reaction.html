@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Clicker - Senior26</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/game-common.css">
+    <style>
+        .target-area {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .target {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff3300 0%, #ff0066 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 30px rgba(255,51,0,0.5);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .target:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 40px rgba(255,51,0,0.7);
+        }
+
+        .target.hit {
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); box-shadow: 0 0 30px rgba(255,51,0,0.5); }
+            50% { transform: scale(1.5); box-shadow: 0 0 50px rgba(255,51,0,0.8); }
+            100% { transform: scale(0); box-shadow: 0 0 0 rgba(255,51,0,0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container"></div>
+    
+    <a href="../games.html" class="back-button">← Back to Games</a>
+
+    <div class="game-container">
+        <h1>Reaction Clicker</h1>
+        <div class="stats">
+            <div>Score: <span id="score">0</span></div>
+            <div>Time: <span id="time">30</span>s</div>
+            <div>Best Score: <span id="bestScore">0</span></div>
+        </div>
+        <div class="game-play-area">
+            <div class="target-area" id="targetArea">
+                <div class="target" id="target"></div>
+            </div>
+        </div>
+        <button class="game-btn" id="startBtn">Start Game</button>
+    </div>
+
+    <script src="../js/particles.js"></script>
+    <script>
+        const targetArea = document.getElementById('targetArea');
+        const target = document.getElementById('target');
+        const startBtn = document.getElementById('startBtn');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const bestScoreDisplay = document.getElementById('bestScore');
+
+        let score = 0;
+        let timeLeft = 30;
+        let gameTimer;
+        let moveTimer;
+        let bestScore = localStorage.getItem('reactionBestScore') || 0;
+        let isPlaying = false;
+
+        bestScoreDisplay.textContent = bestScore;
+
+        function moveTarget() {
+            const maxX = targetArea.offsetWidth - target.offsetWidth;
+            const maxY = targetArea.offsetHeight - target.offsetHeight;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+
+            target.style.display = 'block';
+            target.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        }
+
+        function startGame() {
+            if (isPlaying) return;
+            
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = score;
+            timeDisplay.textContent = timeLeft;
+            startBtn.textContent = 'Playing...';
+            isPlaying = true;
+
+            moveTarget();
+
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(gameTimer);
+            clearTimeout(moveTimer);
+            isPlaying = false;
+            target.style.display = 'none';
+            startBtn.textContent = 'Start Game';
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestScoreDisplay.textContent = bestScore;
+                localStorage.setItem('reactionBestScore', bestScore);
+                alert(`New Best Score: ${bestScore}!`);
+            }
+        }
+
+        target.addEventListener('click', () => {
+            if (!isPlaying) return;
+
+            score++;
+            scoreDisplay.textContent = score;
+            target.classList.add('hit');
+            
+            setTimeout(() => {
+                target.classList.remove('hit');
+                moveTarget();
+            }, 200);
+        });
+
+        startBtn.addEventListener('click', startGame);
+
+        // Initial setup
+        target.style.display = 'none';
+    </script>
+</body>
+</html>

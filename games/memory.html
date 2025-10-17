@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Match - Senior26</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/game-common.css">
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 2.5rem;
+            color: transparent;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform-style: preserve-3d;
+            user-select: none;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(255,255,255,0.1);
+        }
+
+        .card.flipped {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: rotateY(180deg);
+            text-shadow: 0 2px 10px rgba(255,255,255,0.3);
+        }
+
+        .card.matched {
+            background: linear-gradient(135deg, rgba(0,255,0,0.2) 0%, rgba(0,255,0,0.1) 100%);
+            border-color: rgba(0,255,0,0.3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,255,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container"></div>
+    
+    <a href="../games.html" class="back-button">← Back to Games</a>
+
+    <div class="game-container">
+        <h1>Memory Match</h1>
+        <div class="stats">
+            <div>Moves: <span id="moves">0</span></div>
+            <div>Pairs Found: <span id="pairs">0</span>/8</div>
+        </div>
+        <div class="game-play-area">
+            <div class="grid" id="grid"></div>
+        </div>
+        <button class="game-btn restart" id="restart">New Game</button>
+    </div>
+
+    <script src="../js/particles.js"></script>
+    <script>
+        const grid = document.getElementById('grid');
+        const movesDisplay = document.getElementById('moves');
+        const pairsDisplay = document.getElementById('pairs');
+        const restartBtn = document.getElementById('restart');
+
+        const emojis = ['🎮', '🎲', '🎯', '🎪', '🎭', '🎨', '🎬', '🎤'];
+        let cards = [];
+        let flippedCards = [];
+        let moves = 0;
+        let pairs = 0;
+        let canFlip = true;
+
+        function createCard(emoji, index) {
+            const card = document.createElement('button');
+            card.className = 'card';
+            card.dataset.index = index;
+            card.dataset.emoji = emoji;
+            card.textContent = emoji;
+            card.addEventListener('click', () => flipCard(card));
+            return card;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function flipCard(card) {
+            if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                moves++;
+                movesDisplay.textContent = moves;
+                canFlip = false;
+
+                if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
+                    flippedCards.forEach(c => c.classList.add('matched'));
+                    pairs++;
+                    pairsDisplay.textContent = pairs;
+                    flippedCards = [];
+                    canFlip = true;
+
+                    if (pairs === 8) {
+                        setTimeout(() => {
+                            alert(`Congratulations! You won in ${moves} moves!`);
+                        }, 500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        flippedCards.forEach(c => c.classList.remove('flipped'));
+                        flippedCards = [];
+                        canFlip = true;
+                    }, 1000);
+                }
+            }
+        }
+
+        function initializeGame() {
+            grid.innerHTML = '';
+            moves = 0;
+            pairs = 0;
+            flippedCards = [];
+            canFlip = true;
+            movesDisplay.textContent = moves;
+            pairsDisplay.textContent = pairs;
+
+            const cardEmojis = [...emojis, ...emojis];
+            shuffleArray(cardEmojis);
+            cardEmojis.forEach((emoji, index) => {
+                grid.appendChild(createCard(emoji, index));
+            });
+        }
+
+        restartBtn.addEventListener('click', initializeGame);
+        initializeGame();
+    </script>
+</body>
+</html>
