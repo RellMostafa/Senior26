@@ -1,0 +1,94 @@
+/* Design tokens and CSS variables for the site */
+:root {
+    /* Aurora Dark Blue/Pink Theme - Energetic */
+    --electric-blue: #00e5ff;
+    --neon-pink: #ff0080;
+    --deep-blue: #0066ff;
+    --aurora-purple: #c850ff;
+    --soft-cyan: #00ffff;
+    --hot-pink: #ff1493;
+
+    /* Dark base colors */
+    --space-black: #030308;
+    --deep-navy: #080d1a;
+    --dark-blue: #0a1020;
+
+    /* Legacy compatibility (mapped to new colors) */
+    --neon-cyan: var(--electric-blue);
+    --neon-magenta: var(--neon-pink);
+    --neon-violet: var(--aurora-purple);
+    --neon-blue: var(--deep-blue);
+    --neon-lime: #86ff7a;
+
+    --ink-0: var(--space-black);
+    --ink-1: var(--deep-navy);
+    --ink-2: var(--dark-blue);
+
+    --gradient-purple: var(--aurora-purple);
+    --gradient-pink: var(--neon-pink);
+    --gradient-blue: var(--electric-blue);
+    --gradient-deep-purple: #8a2be2;
+
+    /* Aurora Background System - More Vibrant */
+    --bg-base: var(--space-black);
+    --bg-gradient: linear-gradient(
+        135deg,
+        rgba(0, 102, 255, 0.5) 0%,
+        rgba(3, 3, 8, 0.95) 30%,
+        rgba(255, 0, 128, 0.4) 60%,
+        rgba(3, 3, 8, 0.95) 100%
+    );
+    --bg-aurora: radial-gradient(ellipse 1400px 800px at 20% 30%, rgba(0, 229, 255, 0.22), transparent 50%),
+                 radial-gradient(ellipse 1200px 700px at 80% 70%, rgba(255, 0, 128, 0.18), transparent 50%),
+                 radial-gradient(ellipse 1000px 600px at 50% 50%, rgba(200, 80, 255, 0.12), transparent 60%);
+    --bg-grid: linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+               linear-gradient(90deg, rgba(255, 0, 128, 0.05) 1px, transparent 1px);
+
+    /* Text */
+    --text-on-dark: rgba(255, 255, 255, 0.98);
+    --muted-on-dark: rgba(200, 220, 255, 0.85);
+    --text-dim: rgba(180, 200, 255, 0.70);
+
+    /* Typography */
+    --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading-weight: 700;
+    --font-base-size: 16px;
+    --tracking-tight: -0.01em;
+    --tracking-wide: 0.06em;
+
+    /* Layout */
+    --container-max-width: 1200px;
+    --site-gutter: 1rem;
+    --header-radius: 18px;
+
+    /* Radii & shadows */
+    --radius-pill: 50px;
+    --card-radius: 12px;
+    --soft-shadow: 0 10px 35px rgba(0,0,0,0.45);
+    --lift-shadow: 0 18px 55px rgba(0,0,0,0.55);
+
+    /* Glass - Aurora tinted - More vibrant */
+    --glass-bg: rgba(8, 13, 26, 0.6);
+    --glass-bg-strong: rgba(8, 13, 26, 0.8);
+    --glass-border: rgba(0, 229, 255, 0.25);
+    --glass-border-soft: rgba(0, 229, 255, 0.15);
+    --glass-highlight: rgba(255, 0, 128, 0.3);
+
+    /* Aurora Glow - Stronger */
+    --glow-cyan: 0 0 40px rgba(0, 229, 255, 0.7);
+    --glow-magenta: 0 0 45px rgba(255, 0, 128, 0.65);
+    --glow-violet: 0 0 50px rgba(200, 80, 255, 0.6);
+    --glow-blue-pink: 0 0 60px rgba(0, 229, 255, 0.5), 0 0 90px rgba(255, 0, 128, 0.4);
+    --ring: 0 0 0 3px rgba(0, 229, 255, 0.35);
+
+    /* Motion */
+    --ease-default: cubic-bezier(.2,.9,.2,1);
+    --ease-snap: cubic-bezier(.2, 1.2, .2, 1);
+    --timing-fast: 150ms;
+    --timing-medium: 300ms;
+    --timing-slow: 900ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root { --timing-slow: 0ms; --timing-medium: 0ms; --timing-fast: 0ms; }
+}

@@ -9,15 +9,36 @@
     <link rel="stylesheet" href="../css/profiles.css">
     <style>
         body {
-            background: linear-gradient(135deg, #ffc0cb 0%, #ff9aae 100%);
+            background: linear-gradient(135deg, #ff91a7 0%, #e86b88 100%);
             background-size: 200% 200%;
             animation: gradientBG 15s ease infinite;
+        }
+        /* Page-specific particle styling: brighter, slightly larger glitters */
+        .particles-container .particle {
+            opacity: 1 !important;
+            width: 6px !important;
+            height: 6px !important;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.98), rgba(255,255,255,0.85));
+            box-shadow: 0 0 28px rgba(255,255,255,0.95), 0 0 44px rgba(255,0,128,0.6);
+            filter: saturate(1.2) brightness(1.1);
         }
     </style>
 </head>
 <body>
     <div class="particles-container"></div>
     
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand"><a href="../index.html" class="nav-link">Senior26</a></div>
+            <nav class="main-nav nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../memories.html" class="nav-link">Memories Hall</a>
+                <a href="../games.html" class="nav-link">Games</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
     <a href="../memories.html" class="back-button">← Back to Memories Hall</a>
 
     <main class="profile-page">
@@ -27,23 +48,38 @@
             <div class="section">
                 <h2 class="section-title">Note</h2>
                 <div class="section-content">
-                    Add your personal note here...
+                    <p>Cause you’re that someone that gets me like no one else right when I need it the most</p>
+                    <p>this is the note line 42</p>
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">Bio</h2>
                 <div class="section-content">
-                    Add your bio here...
+                    <p>How did we blink and suddenly become THE seniors?? Like excuse me?? I’m Mariem, 17, and yes—I’m that girl who dreams of becoming a gynecologist (girl power kinda mission, you know?💅)</p>
+
+                    <p>Before I say anything else, the best thing that happened to me these past few years was my girls. 🩷🩷</p>
+
+                    <p><strong>Malak:</strong> since 2nd prep we said “besties” and never looked back. That’s loyalty fr 🫡🤍</p>
+                    <p><strong>Mariem:</strong> my loud, dramatic, always-laughing queen — your voice enters the room before you do, and somehow that’s my comfort sound 😭🤍</p>
+                    <p><strong>Mayada:</strong> our calm, chill, always-smiling soul — you move through life like you’re on airplane mode and we honestly need that energy ✨🤍</p>
+
+                    <p>And to the rest of the group😭 — guys, you deserve an award because nobody gatekeeps. Notes? Sent in 0.2 seconds. Explanation? Voice note immediately. Someone stressed? Whole squad turns into therapists. We actually show up for each other and that’s something special.</p>
+
+                    <p>I’m genuinely proud of us. We laughed a lot, stressed a lot, survived everything… Thank u guys😭💙</p>
+
+                    <p>Can’t believe these years are actually over… it’s giving bittersweet season finale. We’re all heading our own ways, but we’ll always be that one unforgettable chapter in each other’s stories. And who knows—maybe the universe’s script has another reunion scene waiting for us 🤍</p>
+
+                    <p>No matter how far we go or what happens, I hope they always remember that I’ll forever be their safe place — the one they can come back to, anytime. Love you girls💋</p>
                 </div>
             </div>
         </div>
 
         <div class="profile-picture">
             <div class="profile-circle">
-                <img src="../media/profile-icon.svg" alt="Profile" class="profile-icon">
+                <img src="../media/profiles/maruma.jpeg" alt="Maruma profile" class="profile-image">
                 <p class="upload-text">Profile Picture</p>
-                <small class="upload-text">Upload to public/media/</small>
+                <small class="upload-text">Upload to media/profiles/</small>
             </div>
         </div>
     </main>

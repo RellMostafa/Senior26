@@ -8,46 +8,202 @@
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/game-common.css">
     <style>
-        .grid {
+        .game-board {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 120px);
+            grid-template-rows: repeat(4, 120px);
             gap: 15px;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 15px;
+            margin: 2rem auto;
+            perspective: 1000px;
         }
 
-        .card {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            font-size: 2.5rem;
-            color: transparent;
-            cursor: pointer;
-            transition: all 0.5s ease;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .memory-card {
+            position: relative;
             transform-style: preserve-3d;
-            user-select: none;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
         }
 
-        .card:hover {
-            box-shadow: 0 6px 20px rgba(255,255,255,0.1);
-        }
-
-        .card.flipped {
-            background: rgba(255,255,255,0.2);
-            color: white;
+        .memory-card.flipped {
             transform: rotateY(180deg);
-            text-shadow: 0 2px 10px rgba(255,255,255,0.3);
         }
 
-        .card.matched {
-            background: linear-gradient(135deg, rgba(0,255,0,0.2) 0%, rgba(0,255,0,0.1) 100%);
-            border-color: rgba(0,255,0,0.3);
+        .memory-card.matched {
+            animation: matchPulse 0.6s ease;
+            pointer-events: none;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% { transform: rotateY(180deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            border: 3px solid;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(156, 39, 176, 0.05));
+            border-color: rgba(156, 39, 176, 0.4);
+            backdrop-filter: blur(10px);
+            transform: rotateY(180deg);
+            box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.25), rgba(156, 39, 176, 0.15));
+            border-color: rgba(156, 39, 176, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-back::before {
+            content: '?';
+            font-size: 4rem;
+            color: rgba(156, 39, 176, 0.6);
+            font-weight: bold;
+        }
+
+        .card-back::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .memory-card:hover:not(.flipped):not(.matched) .card-back {
+            transform: scale(1.05);
+            border-color: rgba(156, 39, 176, 0.8);
+            box-shadow: 0 15px 40px rgba(156, 39, 176, 0.5);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .difficulty-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(156, 39, 176, 0.1));
+            border: 2px solid rgba(156, 39, 176, 0.4);
+            border-radius: 50px;
             color: white;
-            box-shadow: 0 4px 15px rgba(0,255,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .difficulty-btn:hover,
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.4), rgba(156, 39, 176, 0.2));
+            border-color: rgba(156, 39, 176, 0.8);
+            box-shadow: 0 0 30px rgba(156, 39, 176, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #9c27b0;
+            text-shadow: 0 0 20px rgba(156, 39, 176, 0.6);
+        }
+
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, rgba(10, 12, 24, 0.95), rgba(20, 25, 45, 0.9));
+            backdrop-filter: blur(30px);
+            padding: 3rem;
+            border-radius: 25px;
+            border: 3px solid rgba(156, 39, 176, 0.6);
+            box-shadow: 0 0 80px rgba(156, 39, 176, 0.6);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .win-message.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .win-message h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #9c27b0, #e91e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .win-stats {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: repeat(4, 80px);
+                grid-template-rows: repeat(4, 80px);
+                gap: 10px;
+            }
+
+            .card-face {
+                font-size: 2.5rem;
+            }
+
+            .card-back::before {
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
@@ -58,99 +214,51 @@
 
     <div class="game-container">
         <h1>Memory Match</h1>
-        <div class="stats">
-            <div>Moves: <span id="moves">0</span></div>
-            <div>Pairs Found: <span id="pairs">0</span>/8</div>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn" data-pairs="6">Easy (6 pairs)</button>
+            <button class="difficulty-btn active" data-pairs="8">Medium (8 pairs)</button>
+            <button class="difficulty-btn" data-pairs="10">Hard (10 pairs)</button>
         </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Moves</div>
+                <div class="stat-value" id="moves">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Matches</div>
+                <div class="stat-value" id="matches">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Time</div>
+                <div class="stat-value" id="timer">0:00</div>
+            </div>
+        </div>
+
         <div class="game-play-area">
-            <div class="grid" id="grid"></div>
+            <div class="game-board" id="gameBoard"></div>
         </div>
-        <button class="game-btn restart" id="restart">New Game</button>
+
+        <button class="game-btn" id="resetBtn">New Game</button>
+
+        <div class="win-message" id="winMessage">
+            <h2>🎉 You Won!</h2>
+            <div class="win-stats">
+                <p>Moves: <span id="finalMoves">0</span></p>
+                <p>Time: <span id="finalTime">0:00</span></p>
+            </div>
+            <button class="game-btn" id="playAgainBtn">Play Again</button>
+        </div>
+
+        <div class="controls-info">
+            <p>🧠 Find all matching pairs to win!</p>
+            <p>💡 Click cards to flip and reveal symbols</p>
+            <p>⚡ Complete in fewer moves for a better score!</p>
+        </div>
     </div>
 
     <script src="../js/particles.js"></script>
-    <script>
-        const grid = document.getElementById('grid');
-        const movesDisplay = document.getElementById('moves');
-        const pairsDisplay = document.getElementById('pairs');
-        const restartBtn = document.getElementById('restart');
-
-        const emojis = ['🎮', '🎲', '🎯', '🎪', '🎭', '🎨', '🎬', '🎤'];
-        let cards = [];
-        let flippedCards = [];
-        let moves = 0;
-        let pairs = 0;
-        let canFlip = true;
-
-        function createCard(emoji, index) {
-            const card = document.createElement('button');
-            card.className = 'card';
-            card.dataset.index = index;
-            card.dataset.emoji = emoji;
-            card.textContent = emoji;
-            card.addEventListener('click', () => flipCard(card));
-            return card;
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function flipCard(card) {
-            if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-            card.classList.add('flipped');
-            flippedCards.push(card);
-
-            if (flippedCards.length === 2) {
-                moves++;
-                movesDisplay.textContent = moves;
-                canFlip = false;
-
-                if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
-                    flippedCards.forEach(c => c.classList.add('matched'));
-                    pairs++;
-                    pairsDisplay.textContent = pairs;
-                    flippedCards = [];
-                    canFlip = true;
-
-                    if (pairs === 8) {
-                        setTimeout(() => {
-                            alert(`Congratulations! You won in ${moves} moves!`);
-                        }, 500);
-                    }
-                } else {
-                    setTimeout(() => {
-                        flippedCards.forEach(c => c.classList.remove('flipped'));
-                        flippedCards = [];
-                        canFlip = true;
-                    }, 1000);
-                }
-            }
-        }
-
-        function initializeGame() {
-            grid.innerHTML = '';
-            moves = 0;
-            pairs = 0;
-            flippedCards = [];
-            canFlip = true;
-            movesDisplay.textContent = moves;
-            pairsDisplay.textContent = pairs;
-
-            const cardEmojis = [...emojis, ...emojis];
-            shuffleArray(cardEmojis);
-            cardEmojis.forEach((emoji, index) => {
-                grid.appendChild(createCard(emoji, index));
-            });
-        }
-
-        restartBtn.addEventListener('click', initializeGame);
-        initializeGame();
-    </script>
+    <script src="../js/memory-game.js"></script>
 </body>
 </html>

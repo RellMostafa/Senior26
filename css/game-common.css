@@ -1,3 +1,4 @@
+@import url('vars.css');
 /* Common Game Styles */
 .game-container {
     max-width: 1000px;
@@ -9,70 +10,95 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+    z-index: 1;
 }
 
 .game-container h1 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
     margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(0, 212, 255, 0.85) 45%, rgba(255, 45, 149, 0.75) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    text-shadow:
+        0 18px 65px rgba(0,0,0,0.6),
+        0 0 40px rgba(0, 212, 255, 0.25);
 }
 
 .back-button {
     position: fixed;
-    top: 2rem;
-    left: 2rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    backdrop-filter: blur(10px);
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    color: white;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.7), rgba(10, 15, 30, 0.5));
+    backdrop-filter: blur(18px) saturate(150%);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-on-dark);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition:
+        transform var(--timing-fast) var(--ease-snap),
+        box-shadow var(--timing-fast) var(--ease-default),
+        background var(--timing-fast) var(--ease-default);
     z-index: 1000;
-    font-size: 1rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    font-size: 0.95rem;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    box-shadow: 
+        0 10px 35px rgba(0,0,0,0.4),
+        0 0 20px rgba(0, 212, 255, 0.1);
 }
 
 .back-button:hover {
-    background: rgba(255,255,255,0.2);
-    transform: translateX(-5px);
-    box-shadow: 0 4px 30px rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(10, 15, 30, 0.7));
+    transform: translateX(-5px) translateY(-1px);
+    box-shadow: 
+        0 15px 50px rgba(0,0,0,0.5),
+        0 0 35px rgba(0, 212, 255, 0.3),
+        0 0 50px rgba(255, 45, 149, 0.2);
+    border-color: rgba(0, 212, 255, 0.4);
 }
 
 .stats {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    margin: 1.5rem 0;
-    font-size: 1.2rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
+    gap: 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.7) 0%, rgba(10, 15, 30, 0.45) 100%);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    box-shadow: 
+        0 14px 45px rgba(0,0,0,0.4),
+        0 0 30px rgba(0, 212, 255, 0.08);
 }
 
 .game-btn {
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.16) 0%, rgba(255, 45, 149, 0.10) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     color: white;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 50px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transition:
+        transform var(--timing-fast) var(--ease-snap),
+        box-shadow var(--timing-fast) var(--ease-default),
+        background var(--timing-fast) var(--ease-default);
+    backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 
+        0 16px 50px rgba(0,0,0,0.4),
+        0 0 30px rgba(0, 212, 255, 0.1);
 }
 
 .game-btn:hover {
-    background: rgba(255,255,255,0.2);
-    box-shadow: 0 4px 30px rgba(255,255,255,0.2);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.25) 0%, rgba(255, 45, 149, 0.15) 100%);
+    box-shadow: 
+        0 24px 75px rgba(0,0,0,0.6),
+        0 0 40px rgba(0, 212, 255, 0.4),
+        0 0 60px rgba(255, 45, 149, 0.3);
+    transform: translateY(-2px) scale(1.01);
+    border-color: rgba(0, 212, 255, 0.4);
 }
 
 .particles-js-canvas-el {
@@ -91,26 +117,32 @@
 
 /* Game specific containers */
 .game-play-area {
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
-    margin: 2rem auto;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.7) 0%, rgba(10, 15, 30, 0.45) 100%);
+    backdrop-filter: blur(20px) saturate(150%);
+    border-radius: var(--card-radius);
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    box-shadow: 
+        0 18px 60px rgba(0,0,0,0.5),
+        0 0 40px rgba(0, 212, 255, 0.08),
+        inset 0 0 60px rgba(0, 212, 255, 0.03);
     width: 100%;
     max-width: 600px;
 }
 
 .controls-info {
-    color: rgba(255,255,255,0.8);
+    color: rgba(200, 220, 255, 0.85);
     margin-top: 1.5rem;
     font-size: 0.9rem;
-    background: rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.6) 0%, rgba(10, 15, 30, 0.35) 100%);
     padding: 1rem;
     border-radius: 10px;
     max-width: 400px;
     margin: 1.5rem auto;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.3);
 }
 
 /* Mobile Responsive Design */
