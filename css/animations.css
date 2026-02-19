@@ -48,11 +48,17 @@
     from {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
                      0 0 20px rgba(255, 255, 255, 0.3),
-                     0 0 30px var(--gradient-purple);
+                     0 0 30px var(--neon-cyan);
     }
     to {
         text-shadow: 0 0 20px rgba(255, 255, 255, 0.4),
                      0 0 30px rgba(255, 255, 255, 0.4),
-                     0 0 40px var(--gradient-pink);
+                     0 0 40px var(--neon-magenta);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .glow {
+        animation: none;
     }
 }

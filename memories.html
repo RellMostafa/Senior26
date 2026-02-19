@@ -10,25 +10,44 @@
 </head>
 <body>
     <div class="particles-container"></div>
-    
-    <nav class="main-nav">
-        <div class="nav-content">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="memories.html" class="nav-link">Memories Hall</a>
-            <a href="games.html" class="nav-link">Games</a>
-            <a href="#" class="nav-link">About</a>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand"><a href="index.html" class="nav-link">Senior26</a></div>
+            <nav class="main-nav nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="memories.html" class="nav-link">Memories Hall</a>
+                <a href="games.html" class="nav-link">Games</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <main class="memories-content">
         <h1 class="memories-title">Memories Hall</h1>
         <p class="memories-subtitle">Click on any name to explore their story</p>
 
         <div class="video-container">
-            <video id="memoriesVideo" controls playsinline>
-                <source src="media/videos/memories.mp4" type="video/mp4">
+            <button class="video-nav-btn video-prev" id="prevVideo" aria-label="Previous video">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            
+            <video id="memoriesVideo" controls playsinline src="media/videos/memories.mp4">
                 Your browser does not support the video tag.
             </video>
+            
+            <button class="video-nav-btn video-next" id="nextVideo" aria-label="Next video">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            
+            <div class="video-indicators">
+                <span class="video-indicator active" data-video="0"></span>
+                <span class="video-indicator" data-video="1"></span>
+            </div>
         </div>
 
         <div class="names-container">
@@ -55,5 +74,56 @@
     <script src="js/particles.js"></script>
     <script src="js/transitions.js"></script>
     <script src="js/animations.js"></script>
+    <script>
+        // Video Slider
+        const videos = [
+            'media/videos/memories.mp4',
+            'media/videos/The2ndvid.mp4'
+        ];
+        
+        let currentVideoIndex = 0;
+        const videoElement = document.getElementById('memoriesVideo');
+        const prevBtn = document.getElementById('prevVideo');
+        const nextBtn = document.getElementById('nextVideo');
+        const indicators = document.querySelectorAll('.video-indicator');
+        
+        function changeVideo(index) {
+            const wasPlaying = !videoElement.paused;
+            currentVideoIndex = index;
+            
+            videoElement.src = videos[currentVideoIndex];
+            videoElement.load();
+            
+            // Update indicators
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === currentVideoIndex);
+            });
+            
+            if (wasPlaying) {
+                videoElement.play().catch(e => console.log('Autoplay blocked'));
+            }
+        }
+        
+        function nextVideo() {
+            changeVideo((currentVideoIndex + 1) % videos.length);
+        }
+        
+        function prevVideo() {
+            changeVideo((currentVideoIndex - 1 + videos.length) % videos.length);
+        }
+        
+        prevBtn.addEventListener('click', prevVideo);
+        nextBtn.addEventListener('click', nextVideo);
+        
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => changeVideo(index));
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevVideo();
+            if (e.key === 'ArrowRight') nextVideo();
+        });
+    </script>
 </body>
 </html>
+    
