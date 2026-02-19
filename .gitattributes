@@ -1,1 +1,2 @@
+media/videos/*.mp4 filter=lfs diff=lfs merge=lfs -text
 media/videos/The2ndVid.mp4 filter=lfs diff=lfs merge=lfs -text
